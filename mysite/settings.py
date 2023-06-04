@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.postgres',
     'accounts.apps.AccountsConfig',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # new code
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -138,5 +142,16 @@ EMAIL_USE_TLS = True
 LOGIN_REDIRECT_URL = "/"
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 
-MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GITHUB_KEY = '1cd580b38900aa133e9c'
+SOCIAL_AUTH_GITHUB_SECRET = 'c253f776170541376f6321c26672dc45fd997891'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '598027852186-6v9tamdgkfhchk7euo81t1m220cdja9s.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'

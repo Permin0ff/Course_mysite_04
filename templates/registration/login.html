@@ -2,6 +2,8 @@
 {% block title %} Login {% endblock %}
 {% block content %}
     <h2> Login </h2>
+    <a href="{% url 'social:begin' 'github' %}">Sign in with GitHub</a><br>
+    <a href="{% url 'social:begin' 'google-oauth2' %}">Sign in with Google</a>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
