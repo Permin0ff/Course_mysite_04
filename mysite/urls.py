@@ -34,4 +34,5 @@ urlpatterns = [
                   path("accounts/", include("accounts.urls")),
                   path("accounts/", include("django.contrib.auth.urls")),
                   re_path(r'^oauth/', include('social_django.urls', namespace='social')),
+                  path('summernote/', include('django_summernote.urls')),  # new
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

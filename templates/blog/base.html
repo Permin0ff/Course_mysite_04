@@ -27,6 +27,7 @@
         I've written {% total_posts %} posts so far.
     </p>
     <hr>
+
     {% if user.is_authenticated %}
         Hi {{ user.username }}!
         <p><a href="{% url 'users-profile' %}">My profile</a></p>

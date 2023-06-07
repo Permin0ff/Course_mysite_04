@@ -9,6 +9,7 @@ from django.db.models import Count
 from .forms import EmailPostForm, CommentForm, SearchForm
 from django.contrib.postgres.search import TrigramSimilarity
 
+
 class PostListView(ListView):
     queryset = Post.published.all()
     context_object_name = 'posts'
@@ -140,3 +141,5 @@ def post_search(request):
                   {'form': form,
                    'query': query,
                    'results': results})
+
+
