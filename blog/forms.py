@@ -1,7 +1,6 @@
 from django import forms
 from .models import Comment
 from django_summernote.widgets import SummernoteWidget
-from django_summernote.fields import SummernoteTextFormField, SummernoteTextField
 
 class CommentForm(forms.ModelForm):
     body = forms.CharField(required=True,
