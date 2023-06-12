@@ -1,7 +1,3 @@
-<ul>
     {% for post in latest_posts %}
-        <li>
-            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        </li>
+            <a class="list-group-item list-group-item-action" href="{{ post.get_absolute_url }}">{{ post.title }}</a>
     {% endfor %}
-</ul>

@@ -4,52 +4,99 @@
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <link href="{% static "css/blog.css" %}" rel="stylesheet">
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
 </head>
 <body>
-<div id="content">
-
-
-    {% if messages %}
-        {% for message in messages %}
-            {{ message.tags }} {{ message }}
-        {% endfor %}
-    {% endif %}
-
-
-    {% block content %}
-    {% endblock %}
+<!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">My First Blog Django 4</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users-profile' %}"><img
+                            class="rounded-circle" width="30" src="{{ user.profile.avatar.url }}"/> {{ user.username }}
+                    </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Page content-->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="container d-flex align-items-center justify-content-center">
+                        <div class="alert alert-warning alert-dismissible fade show w-50  d-block" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+        <!-- Widgets-->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">This is my blog.</div>
+                <div class="card-body">
+                    I've written {% total_posts %} posts so far.
+                </div>
+            </div>
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header">Search</div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <form action="/search/" method="get" class="input-group">
+                            <input type="text" name="query" class="form-control" placeholder="Enter search term..."
+                                   required="" id="id_query">
+                            <button class="btn btn-primary" id="button-search" type="submit">Go!</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Latest posts widget-->
+            <div class="card mb-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action active" aria-current="true">
+                        Latest posts
+                    </a>
+                    {% show_latest_posts 3 %}
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action active" aria-current="true">
+                        Most commented posts
+                    </a>
+                    {% get_most_commented_posts as most_commented_posts %}
+                    {% for post in most_commented_posts %}
+                        <a class="list-group-item list-group-item-action"
+                           href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="sidebar">
-    <h2>My blog</h2>
-    <p>
-        This is my blog.
-        I've written {% total_posts %} posts so far.
-    </p>
-    <hr>
-
-    {% if user.is_authenticated %}
-        Hi {{ user.username }}!
-        <p><a href="{% url 'users-profile' %}">My profile</a></p>
-        <p><a href="{% url 'logout' %}">Log Out</a></p>
-    {% else %}
-        <p>You are not logged in</p>
-        <p><a href="{% url 'login' %}">Log In</a></p>
-        <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
-    {% endif %}
-    <hr>
-
-    <h3>Latest posts</h3>
-    {% show_latest_posts 3 %}
-    <h3>Most commented posts</h3>
-    {% get_most_commented_posts as most_commented_posts %}
-    <ul>
-        {% for post in most_commented_posts %}
-            <li>
-                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+<!-- Footer-->
+<footer class="py-5 bg-dark mt-2">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023, Powered by
+        Django</p></div>
+</footer>
 </body>
 </html>
