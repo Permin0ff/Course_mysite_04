@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'blog_api.apps.BlogApiConfig',
     'django_filters',
-
+    'rest_framework.authtoken',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -95,9 +96,9 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blog3',
-        'USER': 'blog3',
-        'PASSWORD': '251125',
+        'NAME': 'blog',
+        'USER': 'blog',
+        'PASSWORD': 'xxxxxxx',
     }
 }
 
@@ -144,8 +145,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Конфигурация сервера электронной почты
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 's0ketra@gmail.com'
-EMAIL_HOST_PASSWORD = 'bnbivhnvwloyuejs'
+EMAIL_HOST_USER = 'my_mail@gmail.com'
+EMAIL_HOST_PASSWORD = 'xxxxx'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -172,16 +173,22 @@ SUMMERNOTE_THEME = 'bs5'
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # new
-    'PAGE_SIZE': 5 ,
+    'PAGE_SIZE': 5,
 
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-    ]
-
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # new
+}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Blog API Project",
+    "DESCRIPTION": "A sample blog to learn about DRF",
+    "VERSION": "1.0.0",
+    # OTHER SETTINGS
 }

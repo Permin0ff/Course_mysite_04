@@ -1,10 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.pagination import PageNumberPagination
-
 from blog.models import Post
 from .serializers import PostSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from .permissions import IsAuthorOrReadOnly  # new
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -14,6 +14,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class PostList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)  # new
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -39,5 +40,7 @@ class UserPostList(generics.ListAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)  # new
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = (permissions.IsAdminUser,)
